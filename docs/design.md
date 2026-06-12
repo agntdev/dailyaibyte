@@ -66,11 +66,11 @@
   📰 *Today’s AI News Digest* (Date)  
   ```  
 
-- **Summary Body**:  
+- **Summary Body** (key takeaways as bullet points, per the GENERAL doc format):  
   ```  
-  1. [Brief takeaway 1]  
-  2. [Brief takeaway 2]  
-  3. [Brief takeaway 3]  
+  • [Brief takeaway 1]  
+  • [Brief takeaway 2]  
+  • [Brief takeaway 3]  
   ```  
 
 - **Error/Empty State**:  
