@@ -3,9 +3,10 @@
 // silent-ignore catch-all must stay LAST so it only sees unhandled updates.
 
 import type { Feature } from "./bot.js";
+import { startFeature } from "./features/start.js";
 
 export const defaultFeatures: Feature[] = [
-  // FEAT01 /start opt-in        → installed by its task
+  startFeature, // FEAT01 /start opt-in
   // FEAT02 /stop opt-out        → installed by its task
   // FEAT07 group/channel membership → installed by its task
   // FEAT06 digest delivery job  → installed by its task
