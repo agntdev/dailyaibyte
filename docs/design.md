@@ -88,11 +88,11 @@ Mirrors the optional feature in the GENERAL doc: "Handle implicit subscription t
   ```  
   - *Format constraint*: The rendered headline line, including the date, emoji, and Markdown markers, must not exceed **120 characters**. If a generated headline would exceed the limit, truncate it to 119 characters and append an ellipsis (…).  
 
-- **Summary Body**:  
+- **Summary Body** (key takeaways as bullet points, per the GENERAL doc format):  
   ```  
-  1. [Brief takeaway 1]  
-  2. [Brief takeaway 2]  
-  3. [Brief takeaway 3]  
+  • [Brief takeaway 1]  
+  • [Brief takeaway 2]  
+  • [Brief takeaway 3]  
   ```  
 
 - **Error/Empty State**:  
