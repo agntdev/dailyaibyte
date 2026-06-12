@@ -3,9 +3,9 @@
 // Idempotent: /stop from a non-subscriber gets the same confirmation.
 
 import type { Feature } from "../bot.js";
+import { STOP_REPLY } from "../strings.js";
 
-export const STOP_REPLY =
-  "You’ve been unsubscribed from the AI News Digest. Send /start to rejoin.";
+export { STOP_REPLY };
 
 export const stopFeature: Feature = (app) => {
   app.bot.command("stop", async (ctx) => {

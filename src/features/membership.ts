@@ -6,10 +6,9 @@
 
 import type { ChatMember } from "grammy/types";
 import type { Feature } from "../bot.js";
+import { GROUP_CONFIRMATION } from "../strings.js";
 
-export const GROUP_CONFIRMATION =
-  "This group will now receive the daily AI News Digest every morning at 7:00 AM UTC. " +
-  "An admin can remove me at any time to stop the digest.";
+export { GROUP_CONFIRMATION };
 
 function isActive(member: ChatMember, isChannel: boolean): boolean {
   if (member.status === "administrator") {

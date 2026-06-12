@@ -1,0 +1,108 @@
+[
+  {
+    "name": "/start subscribes and confirms",
+    "steps": [
+      {
+        "send": { "text": "/start" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "Good morning! 🌟 You’re receiving today’s AI News Digest for business professionals.\nTo stop receiving updates, send /stop."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "/stop unsubscribes and confirms",
+    "steps": [
+      {
+        "send": { "text": "/start" },
+        "expect": [{ "method": "sendMessage" }]
+      },
+      {
+        "send": { "text": "/stop" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "You’ve been unsubscribed from the AI News Digest. Send /start to rejoin."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "/stop is idempotent for non-subscribers",
+    "steps": [
+      {
+        "send": { "text": "/stop" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "You’ve been unsubscribed from the AI News Digest. Send /start to rejoin."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "non-command text is silently ignored",
+    "strict": true,
+    "steps": [
+      {
+        "send": { "text": "hello there" },
+        "expect": []
+      }
+    ]
+  },
+  {
+    "name": "unknown command is silently ignored",
+    "strict": true,
+    "steps": [
+      {
+        "send": { "text": "/help" },
+        "expect": []
+      }
+    ]
+  },
+  {
+    "name": "bot added to a group sends one-time confirmation",
+    "steps": [
+      {
+        "send": {
+          "update": {
+            "update_id": 9001,
+            "my_chat_member": {
+              "chat": { "id": -100123, "type": "group", "title": "Test Group" },
+              "from": { "id": 7, "is_bot": false, "first_name": "Admin" },
+              "date": 1780000000,
+              "old_chat_member": {
+                "status": "left",
+                "user": { "id": 1, "is_bot": true, "first_name": "TestBot" }
+              },
+              "new_chat_member": {
+                "status": "member",
+                "user": { "id": 1, "is_bot": true, "first_name": "TestBot" }
+              }
+            }
+          }
+        },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "chat_id": -100123,
+              "text": "This group will now receive the daily AI News Digest every morning at 7:00 AM UTC. An admin can remove me at any time to stop the digest."
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
