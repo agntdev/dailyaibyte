@@ -1,0 +1,301 @@
+[
+  {
+    "name": "/start subscribes and sends the exact confirmation copy",
+    "steps": [
+      {
+        "send": { "text": "/start" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "Good morning! 🌟 You’re receiving today’s AI News Digest for business professionals.\nTo stop receiving updates, send /stop."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "/start is idempotent — repeat subscriber gets the same confirmation",
+    "steps": [
+      {
+        "send": { "text": "/start" },
+        "expect": [{ "method": "sendMessage" }]
+      },
+      {
+        "send": { "text": "/start" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "Good morning! 🌟 You’re receiving today’s AI News Digest for business professionals.\nTo stop receiving updates, send /stop."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "/stop unsubscribes with the exact confirmation copy",
+    "steps": [
+      {
+        "send": { "text": "/start" },
+        "expect": [{ "method": "sendMessage" }]
+      },
+      {
+        "send": { "text": "/stop" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "You’ve been unsubscribed from the AI News Digest. Send /start to rejoin."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "/stop is idempotent — non-subscriber gets the same confirmation",
+    "steps": [
+      {
+        "send": { "text": "/stop" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "You’ve been unsubscribed from the AI News Digest. Send /start to rejoin."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "stop then start rejoins",
+    "steps": [
+      { "send": { "text": "/start" }, "expect": [{ "method": "sendMessage" }] },
+      { "send": { "text": "/stop" }, "expect": [{ "method": "sendMessage" }] },
+      {
+        "send": { "text": "/start" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "Good morning! 🌟 You’re receiving today’s AI News Digest for business professionals.\nTo stop receiving updates, send /stop."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "non-command text is silently ignored",
+    "strict": true,
+    "steps": [
+      { "send": { "text": "hello there" }, "expect": [] }
+    ]
+  },
+  {
+    "name": "unknown command is silently ignored",
+    "strict": true,
+    "steps": [
+      { "send": { "text": "/help" }, "expect": [] }
+    ]
+  },
+  {
+    "name": "subscriber sending stray text gets no reply",
+    "steps": [
+      { "send": { "text": "/start" }, "expect": [{ "method": "sendMessage" }] },
+      { "send": { "text": "what is the news today?" }, "expect": [] }
+    ],
+    "strict": false
+  },
+  {
+    "name": "bot added to a group sends the one-time confirmation",
+    "steps": [
+      {
+        "send": {
+          "update": {
+            "update_id": 9001,
+            "my_chat_member": {
+              "chat": { "id": -100123, "type": "group", "title": "Test Group" },
+              "from": { "id": 7, "is_bot": false, "first_name": "Admin" },
+              "date": 1780000000,
+              "old_chat_member": {
+                "status": "left",
+                "user": { "id": 1, "is_bot": true, "first_name": "TestBot" }
+              },
+              "new_chat_member": {
+                "status": "member",
+                "user": { "id": 1, "is_bot": true, "first_name": "TestBot" }
+              }
+            }
+          }
+        },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "chat_id": -100123,
+              "text": "This group will now receive the daily AI News Digest every morning at 7:00 AM UTC. An admin can remove me at any time to stop the digest."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "group promotion after add does not repeat the confirmation",
+    "strict": true,
+    "steps": [
+      {
+        "send": {
+          "update": {
+            "update_id": 9010,
+            "my_chat_member": {
+              "chat": { "id": -100124, "type": "group", "title": "Test Group 2" },
+              "from": { "id": 7, "is_bot": false, "first_name": "Admin" },
+              "date": 1780000000,
+              "old_chat_member": {
+                "status": "left",
+                "user": { "id": 1, "is_bot": true, "first_name": "TestBot" }
+              },
+              "new_chat_member": {
+                "status": "member",
+                "user": { "id": 1, "is_bot": true, "first_name": "TestBot" }
+              }
+            }
+          }
+        },
+        "expect": [
+          { "method": "sendMessage", "payload": { "chat_id": -100124 } }
+        ]
+      },
+      {
+        "send": {
+          "update": {
+            "update_id": 9011,
+            "my_chat_member": {
+              "chat": { "id": -100124, "type": "group", "title": "Test Group 2" },
+              "from": { "id": 7, "is_bot": false, "first_name": "Admin" },
+              "date": 1780000100,
+              "old_chat_member": {
+                "status": "member",
+                "user": { "id": 1, "is_bot": true, "first_name": "TestBot" }
+              },
+              "new_chat_member": {
+                "status": "administrator",
+                "user": { "id": 1, "is_bot": true, "first_name": "TestBot" },
+                "can_be_edited": false,
+                "is_anonymous": false,
+                "can_manage_chat": true,
+                "can_delete_messages": false,
+                "can_manage_video_chats": false,
+                "can_restrict_members": false,
+                "can_promote_members": false,
+                "can_change_info": false,
+                "can_invite_users": false,
+                "can_post_stories": false,
+                "can_edit_stories": false,
+                "can_delete_stories": false
+              }
+            }
+          }
+        },
+        "expect": []
+      }
+    ]
+  },
+  {
+    "name": "bot added to a channel with post permission subscribes silently",
+    "strict": true,
+    "steps": [
+      {
+        "send": {
+          "update": {
+            "update_id": 9020,
+            "my_chat_member": {
+              "chat": { "id": -100200, "type": "channel", "title": "Test Channel" },
+              "from": { "id": 7, "is_bot": false, "first_name": "Owner" },
+              "date": 1780000000,
+              "old_chat_member": {
+                "status": "left",
+                "user": { "id": 1, "is_bot": true, "first_name": "TestBot" }
+              },
+              "new_chat_member": {
+                "status": "administrator",
+                "user": { "id": 1, "is_bot": true, "first_name": "TestBot" },
+                "can_be_edited": false,
+                "is_anonymous": false,
+                "can_manage_chat": true,
+                "can_delete_messages": false,
+                "can_manage_video_chats": false,
+                "can_restrict_members": false,
+                "can_promote_members": false,
+                "can_change_info": false,
+                "can_invite_users": false,
+                "can_post_stories": false,
+                "can_edit_stories": false,
+                "can_delete_stories": false,
+                "can_post_messages": true
+              }
+            }
+          }
+        },
+        "expect": []
+      }
+    ]
+  },
+  {
+    "name": "bot removed from a group leaves silently",
+    "strict": true,
+    "steps": [
+      {
+        "send": {
+          "update": {
+            "update_id": 9030,
+            "my_chat_member": {
+              "chat": { "id": -100125, "type": "group", "title": "Test Group 3" },
+              "from": { "id": 7, "is_bot": false, "first_name": "Admin" },
+              "date": 1780000000,
+              "old_chat_member": {
+                "status": "left",
+                "user": { "id": 1, "is_bot": true, "first_name": "TestBot" }
+              },
+              "new_chat_member": {
+                "status": "member",
+                "user": { "id": 1, "is_bot": true, "first_name": "TestBot" }
+              }
+            }
+          }
+        },
+        "expect": [
+          { "method": "sendMessage", "payload": { "chat_id": -100125 } }
+        ]
+      },
+      {
+        "send": {
+          "update": {
+            "update_id": 9031,
+            "my_chat_member": {
+              "chat": { "id": -100125, "type": "group", "title": "Test Group 3" },
+              "from": { "id": 7, "is_bot": false, "first_name": "Admin" },
+              "date": 1780000200,
+              "old_chat_member": {
+                "status": "member",
+                "user": { "id": 1, "is_bot": true, "first_name": "TestBot" }
+              },
+              "new_chat_member": {
+                "status": "kicked",
+                "user": { "id": 1, "is_bot": true, "first_name": "TestBot" },
+                "until_date": 0
+              }
+            }
+          }
+        },
+        "expect": []
+      }
+    ]
+  }
+]
