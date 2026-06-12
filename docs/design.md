@@ -61,10 +61,11 @@
 ---
 
 ## MESSAGE COPY & TONE  
-- **Daily Summary Headline**:  
+- **Daily Summary Headline** (max 120 characters):  
   ```  
   📰 *Today’s AI News Digest* (Date)  
   ```  
+  - *Format constraint*: The rendered headline line, including the date, emoji, and Markdown markers, must not exceed **120 characters**. If a generated headline would exceed the limit, truncate it to 119 characters and append an ellipsis (…).  
 
 - **Summary Body**:  
   ```  
