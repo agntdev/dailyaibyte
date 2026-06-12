@@ -50,6 +50,27 @@
 
 ---
 
+## IMPLICIT SUBSCRIPTION VIA GROUP/CHANNEL MEMBERSHIP (Optional)  
+Mirrors the optional feature in the GENERAL doc: "Handle implicit subscription through group/channel membership (if implemented)."  
+
+- **Concept**: A Telegram group or channel becomes an implicit subscriber when the bot is added to it. Individual members never run `/start` — they receive the digest passively through the chat.  
+
+- **UX Flow**:  
+  1. A group admin (or channel owner) adds the bot to the chat. For channels, the bot must be granted permission to post messages.  
+  2. The bot records the chat ID as an implicitly subscribed recipient.  
+  3. In groups, the bot posts a one-time confirmation:  
+     ```  
+     This group will now receive the daily AI News Digest every morning at 7:00 AM UTC. An admin can remove me at any time to stop the digest.  
+     ```  
+     In channels, no confirmation is posted (the bot stays silent until the first digest).  
+  4. The daily summary is delivered to the chat at 7:00 AM UTC, identical in format to the direct-message digest.  
+
+- **Implicit Unsubscribe**: Removing the bot from the group/channel (or revoking its posting permission) unsubscribes that chat. No command is required.  
+
+- **Note**: This flow is optional. If group/channel support is not implemented, the bot operates with direct-message recipients only.  
+
+---
+
 ## INLINE-KEYBOARD LAYOUT  
 - **Daily Summary Message**:  
   - *Buttons*:  
