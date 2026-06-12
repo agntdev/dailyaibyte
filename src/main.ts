@@ -15,5 +15,10 @@ if (!token) {
 const store = new Store();
 const bot = buildBot(token, store, configFromEnv(), defaultFeatures);
 
+// Graceful container shutdown (toolkit Dockerfile sends SIGTERM): finish the
+// in-flight update, then stop polling.
+process.once("SIGTERM", () => void bot.stop());
+process.once("SIGINT", () => void bot.stop());
+
 console.log("[dailyaibyte] starting long polling");
 void bot.start();

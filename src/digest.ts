@@ -4,9 +4,9 @@
 // parse_mode: "Markdown". No buttons, no inline keyboards (design.md).
 
 import type { Article } from "./news.js";
+import { NO_NEWS_MESSAGE, TECH_ERROR_MESSAGE } from "./strings.js";
 
-export const NO_NEWS_MESSAGE = "No significant AI news today. Check back tomorrow!";
-export const TECH_ERROR_MESSAGE = "Technical error – try again later.";
+export { NO_NEWS_MESSAGE, TECH_ERROR_MESSAGE };
 
 export const HEADLINE_MAX_CHARS = 120;
 

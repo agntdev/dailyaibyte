@@ -4,10 +4,9 @@
 // subscribed user gets the same confirmation, no error and no special copy.
 
 import type { Feature } from "../bot.js";
+import { START_REPLY } from "../strings.js";
 
-export const START_REPLY =
-  "Good morning! 🌟 You’re receiving today’s AI News Digest for business professionals.\n" +
-  "To stop receiving updates, send /stop.";
+export { START_REPLY };
 
 export const startFeature: Feature = (app) => {
   app.bot.command("start", async (ctx) => {
