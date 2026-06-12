@@ -1,0 +1,59 @@
+{
+  "phase": "dev",
+  "tasks": [
+    {
+      "key": "F00",
+      "kind": "foundation",
+      "title": "Project skeleton: makeBot() entry point, config, subscriber storage, command router",
+      "depends_on": []
+    },
+    {
+      "key": "FEAT01",
+      "kind": "feature",
+      "title": "/start opt-in handler (idempotent subscribe + confirmation copy)",
+      "depends_on": ["F00"]
+    },
+    {
+      "key": "FEAT02",
+      "kind": "feature",
+      "title": "/stop opt-out handler (idempotent unsubscribe + confirmation copy)",
+      "depends_on": ["F00"]
+    },
+    {
+      "key": "FEAT03",
+      "kind": "feature",
+      "title": "Silent-ignore fallback for all non-subscription input (commands, text, media, callbacks)",
+      "depends_on": ["F00"]
+    },
+    {
+      "key": "FEAT04",
+      "kind": "feature",
+      "title": "GNews fetch + keyword relevance filtering (top 10 in, 3-5 general-AI articles out)",
+      "depends_on": ["F00"]
+    },
+    {
+      "key": "FEAT05",
+      "kind": "feature",
+      "title": "Digest composer: 120-char headline, 3 bullet takeaways, plain article URL, error/empty copy",
+      "depends_on": ["FEAT04"]
+    },
+    {
+      "key": "FEAT06",
+      "kind": "feature",
+      "title": "Scheduled 07:00 UTC delivery job: send to all subscribers, per-chat failure handling, GNews retry-once",
+      "depends_on": ["FEAT01", "FEAT05"]
+    },
+    {
+      "key": "FEAT07",
+      "kind": "feature",
+      "title": "Implicit group/channel subscription via my_chat_member (add, confirm in groups, remove on kick)",
+      "depends_on": ["F00"]
+    },
+    {
+      "key": "INT01",
+      "kind": "integration",
+      "title": "Wire all flows together, edge-case polish, strings module, harness smoke pass",
+      "depends_on": ["FEAT02", "FEAT03", "FEAT06", "FEAT07"]
+    }
+  ]
+}
