@@ -1,34 +1,25 @@
 # Daily AI News Digest Bot - UX SPEC  
 
-## COMMAND TREE  
-- **/start**:  
-  - *Action*: Welcome message with digest info and optional opt-in/opt-out (if subscription tracking is implemented).  
+## SUBSCRIPTION MECHANICS (not interactive features)  
+Per the GENERAL doc, interactive features (commands, buttons, replies) are a **non-goal**. The two entry points below are not interactive features: they are the minimal subscription plumbing required by Telegram itself (`/start` is mandatory to open a bot chat) and by the GENERAL doc's "Support optional opt-out mechanism" feature (`/stop`). The bot offers no other commands, no buttons, and no conversational replies.  
+
+- **/start** (opt-in — Telegram-mandated entry point):  
+  - *Action*: Subscribe the user to the daily digest and confirm.  
   - *Response*:  
     ```  
     Good morning! 🌟 You’re receiving today’s AI News Digest for business professionals.  
-    To stop receiving updates, reply with /stop.  
+    To stop receiving updates, send /stop.  
     ```  
 
-- **/stop**:  
-  - *Action*: Unsubscribe user from daily digest (if subscription tracking is implemented).  
+- **/stop** (opt-out mechanism, per GENERAL doc feature list):  
+  - *Action*: Unsubscribe the user from the daily digest and confirm.  
   - *Response*:  
     ```  
-    You’ve been unsubscribed from the AI News Digest. Reply with /start to rejoin.  
+    You’ve been unsubscribed from the AI News Digest. Send /start to rejoin.  
     ```  
 
-- **/help**:  
-  - *Action*: Explain bot functionality.  
-  - *Response*:  
-    ```  
-    I deliver a daily morning summary of general AI news for business professionals.  
-    No interaction needed – just enjoy your digest! 🚀  
-    ```  
-
-- **Unknown Commands**:  
-  - *Action*: Ignore or respond with:  
-    ```  
-    I’m here to deliver your AI news digest. Type /help for more info.  
-    ```  
+- **Anything else** (other commands, text, replies):  
+  - *Action*: Silently ignored. The bot is delivery-only and never engages in interaction.  
 
 ---
 
@@ -50,13 +41,11 @@
 
 ---
 
-## INLINE-KEYBOARD LAYOUT  
-- **Daily Summary Message**:  
-  - *Buttons*:  
-    - **Read More** (if a primary article link exists).  
-      - *Callback*: Open article URL.  
-    - **Stop Digest** (optional, if subscription tracking is implemented).  
-      - *Callback*: Trigger `/stop` command.  
+## NO INLINE KEYBOARDS  
+Inline keyboard buttons are interactive features and therefore out of scope (GENERAL doc Non-Goals). The daily summary message contains **no buttons**:  
+
+- The optional link to the most relevant full article (GENERAL doc Feature List) is included as a **plain URL on its own line** at the end of the message body — no "Read More" button.  
+- Opting out is done by sending `/stop` (see Subscription Mechanics) — no "Stop Digest" button.  
 
 ---
 
@@ -85,15 +74,15 @@
 ## EDGE CASES  
 - **Invalid Input**: Ignore non-command messages.  
 - **Timeouts**: Retry GNews API request once; if failed, send error message.  
-- **Unknown Commands**: Respond with `/help`-style message.  
+- **Unknown Commands**: Silently ignored (no interactive responses; see Subscription Mechanics).  
 - **Empty News Feed**: Send "No news today" with a light-hearted note.  
 - **Permission Errors**: If API key is invalid, log error and send generic message.  
 
 ---
 
 ## i18n (Translatable Strings)  
-- All user-facing text (welcome messages, error messages, button labels, daily summary structure).  
-- Example: "Read More" → "Ler Mais" (Portuguese), "Weitere Informationen" (German).  
+- All user-facing text (welcome messages, error messages, daily summary structure).  
+- Example: "No significant AI news today." → "Sem notícias relevantes de IA hoje." (Portuguese), "Heute keine relevanten KI-Nachrichten." (German).  
 
 --- 
 
